@@ -16,11 +16,14 @@ import {
   HelpCircle,
 } from "lucide-react";
 import { cn } from "../utils";
-import ProgressStep from "../components/ProgressStep";
-import SkipCard from "../components/SkipCard";
-import SelectedSkipFooter from "../components/SelectedSkipFooter";
-import ThemeToggle from "../components/ThemeToggle";
 import { useGetSkips } from "../hooks/useGetSkips";
+import {
+  SkipCardSkeleton,
+  SelectedSkipFooter,
+  ThemeToggle,
+  ProgressStep,
+  SkipCard,
+} from "../components";
 
 export const SkipSelectionPage = () => {
   const [selectedSkip, setSelectedSkip] = useState<number | null>(null);
@@ -95,17 +98,20 @@ export const SkipSelectionPage = () => {
             Select the perfect skip for your waste disposal needs
           </p>
         </div>
-
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 w-full">
-          {skips?.map((skip, index) => (
-            <SkipCard
-              key={skip.id}
-              skip={skip}
-              isSelected={selectedSkip === skip.id}
-              onSelect={() => handleSkipSelection(skip.id)}
-              delay={index * 100}
-            />
-          ))}
+          {isLoading
+            ? Array.from({ length: 6 }, (_, index) => (
+                <SkipCardSkeleton key={index} />
+              ))
+            : skips?.map((skip, index) => (
+                <SkipCard
+                  key={skip.id}
+                  skip={skip}
+                  isSelected={selectedSkip === skip.id}
+                  onSelect={() => handleSkipSelection(skip.id)}
+                  delay={index * 100}
+                />
+              ))}
         </div>
       </div>
 
